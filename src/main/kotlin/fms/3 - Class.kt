@@ -1,16 +1,33 @@
 package fms
 
-object Singleton {
-  fun amISingleton() {
-    println("Yes I am")
-  }
-}
+object EmptySingleton
 
 class Empty
 
-class SimpleClass(val prop: String)
+object SimpleSingleton {
+  val prop1 = 123
+}
 
-data class DataClass(val num: Int)
+object JavaSimpleSingleton {
+  @JvmStatic
+  val jvmStatic = 123
+  @JvmField
+  val jvmField = 123
+}
+
+class SimpleClass(var prop: String)
+
+data class DataClass(val num: Int) {
+  lateinit var late: String
+
+  fun calledLater() {
+    late = "foo"
+  }
+
+  fun accessLate() {
+    println(late)
+  }
+}
 
 class MyClass internal constructor(field: String) {
   companion object Builder {
@@ -47,7 +64,10 @@ class SubClass : Interface, ImplClass() {
 }
 
 fun main(args: Array<String>) {
-  Singleton.amISingleton()
+  val dataClass = DataClass(42)
+  dataClass.calledLater()
+  dataClass.accessLate()
+
   val myClass: MyClass = MyClass.builder()
     .withField("Kotlin")
     .build()
